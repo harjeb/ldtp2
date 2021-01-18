@@ -103,8 +103,12 @@ class Transport(xmlrpclib.Transport):
                                       'python', '-c', pycmd)
         else:
             pycmd = 'import ldtpd; ldtpd.main(parentpid=%s)' % pid
-            self._daemon = os.spawnlp(os.P_NOWAIT, 'python',
+            if sys.version_info.major == 2:
+                self._daemon = os.spawnlp(os.P_NOWAIT, 'python',
                                       'python', '-c', pycmd)
+            else:
+                self._daemon = os.spawnlp(os.P_NOWAIT, 'python3',
+                                      'python3', '-c', pycmd)  
     # http://www.itkovian.net/base/transport-class-for-pythons-xml-rpc-lib/
     ##
     # Connect to server.
